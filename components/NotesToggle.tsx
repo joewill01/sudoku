@@ -46,7 +46,7 @@ export default function NotesToggle({onClick, isNotesMode}: NotesToggleProps) {
             </Animated.Text>
 
             <Animated.Text style={[styles.text, notesTextStyle]}>
-                notes
+                note
             </Animated.Text>
         </TouchableScale>
     )
@@ -62,10 +62,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         alignItems: "center",
         flexDirection: "row",
-
-
-        marginTop: 20
-
+        marginTop: 30
     },
     toggle: {
         position: "absolute",

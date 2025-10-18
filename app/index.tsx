@@ -1,12 +1,17 @@
 import EraseIcon from "@/assets/icons/erase.svg";
 import UndoIcon from "@/assets/icons/undo.svg";
+import AppText from "@/components/AppText";
 import Board from "@/components/Board/Board";
 import IconButton from "@/components/IconButton";
 import NotesToggle from "@/components/NotesToggle";
 import NumberButton from "@/components/NumberButton";
+import { InclusiveSans_400Regular } from '@expo-google-fonts/inclusive-sans/400Regular';
+import { useFonts } from '@expo-google-fonts/inclusive-sans/useFonts';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+
+
 
 type Cell = {
     id: number;
@@ -47,6 +52,10 @@ function toggleCellNote(grid: Cell[][], setGrid: (grid: Cell[][]) => void, cellI
 
 
 export default function index() {
+    let [fontsLoaded] = useFonts({
+        InclusiveSans_400Regular
+    })
+    
     function handleNumberClick(number: number) {
         if (isNotesMode) {
             toggleCellNote(grid, setGrid, selectedCellId, number);
@@ -58,7 +67,7 @@ export default function index() {
     const [grid, setGrid] = useState<Cell[][]>(
         [
             [
-                {id: 0, digit: 0, fixed: false, notes: [1, 6, 9]},
+                {id: 0, digit: 0, fixed: false, notes: []},
                 {id: 1, digit: 0, fixed: false, notes: []},
                 {id: 2, digit: 0, fixed: false, notes: []},
                 {id: 3, digit: 0, fixed: false, notes: []},
@@ -170,33 +179,38 @@ export default function index() {
             />
 
             <View style={styles.headerContainer}>
-                <Text style={styles.timer}>01:40</Text>
-                <Text style={styles.difficulty}>Medium</Text>
+                <AppText style={styles.timer}>01:40</AppText>
+                <AppText style={styles.difficulty}>medium</AppText>
             </View>
 
             <View style={styles.gameContainer}>
                 <Board grid={grid} selectedCell={selectedCellId} onCellPress={(cell: Cell) => {setSelectedCellId(cell.id)}}/>
                 
-                <View style={styles.numberButtonContainer}>
-                    <IconButton icon={EraseIcon} onClick={() => {setCellDigit(grid, setGrid, selectedCellId, 0)}}>erase</IconButton>
-                    <IconButton icon={UndoIcon} onClick={() => {setCellDigit(grid, setGrid, selectedCellId, 0)}}>undo</IconButton>
 
-                    <View style={styles.numberButtonRow}>
-                        <NumberButton number={1} onClick={() => {handleNumberClick(1)}} />
-                        <NumberButton number={2} onClick={() => {handleNumberClick(2)}} />
-                        <NumberButton number={3} onClick={() => {handleNumberClick(3)}} />
-                        <NumberButton number={4} onClick={() => {handleNumberClick(4)}} />
-                        <NumberButton number={5} onClick={() => {handleNumberClick(5)}} />
+                <View style={styles.controlsContainer}>
+                    <View style={styles.iconButtonContainer}>
+                        <IconButton icon={EraseIcon} onClick={() => {setCellDigit(grid, setGrid, selectedCellId, 0)}}>erase</IconButton>
+                        <IconButton icon={UndoIcon} onClick={() => {setCellDigit(grid, setGrid, selectedCellId, 0)}}>undo</IconButton>
                     </View>
-                    <View style={styles.numberButtonRow}>
-                        <NumberButton number={6} onClick={() => {handleNumberClick(6)}} />
-                        <NumberButton number={7} onClick={() => {handleNumberClick(7)}} />
-                        <NumberButton number={8} onClick={() => {handleNumberClick(8)}} />
-                        <NumberButton number={9} onClick={() => {handleNumberClick(9)}} />
-                    </View>
-                </View>
 
-                <NotesToggle isNotesMode={isNotesMode} onClick={() => setIsNotesMode(!isNotesMode)} />
+                    <View style={styles.numberButtonContainer}>
+                        <View style={styles.numberButtonRow}>
+                            <NumberButton number={1} onClick={() => {handleNumberClick(1)}} />
+                            <NumberButton number={2} onClick={() => {handleNumberClick(2)}} />
+                            <NumberButton number={3} onClick={() => {handleNumberClick(3)}} />
+                            <NumberButton number={4} onClick={() => {handleNumberClick(4)}} />
+                            <NumberButton number={5} onClick={() => {handleNumberClick(5)}} />
+                        </View>
+                        <View style={styles.numberButtonRow}>
+                            <NumberButton number={6} onClick={() => {handleNumberClick(6)}} />
+                            <NumberButton number={7} onClick={() => {handleNumberClick(7)}} />
+                            <NumberButton number={8} onClick={() => {handleNumberClick(8)}} />
+                            <NumberButton number={9} onClick={() => {handleNumberClick(9)}} />
+                        </View>
+
+                        <NotesToggle isNotesMode={isNotesMode} onClick={() => setIsNotesMode(!isNotesMode)} />
+                    </View>
+                 </View>
             </View>
 
         </View>
@@ -232,7 +246,6 @@ const styles = StyleSheet.create({
         bottom: 34,
         left: 24,
         fontSize: 32,
-        fontFamily: "Inclusive Sans"
     },
 
     difficulty: {
@@ -240,7 +253,7 @@ const styles = StyleSheet.create({
         bottom: 16,
         left: 24,
         fontSize: 16,
-        color: "#787878"
+        color: "#787878",
     },
 
     gameContainer: {
@@ -256,13 +269,26 @@ const styles = StyleSheet.create({
         paddingTop: 22
     },
 
+    controlsContainer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "space-around",
+        paddingTop: 40
+    },
+
     numberButtonContainer: {
-        marginTop: 20,
         alignItems: "center",
         gap: 10
     },
     numberButtonRow: {
         flexDirection: "row",
         gap: 10
+    },
+
+    iconButtonContainer: {
+        position: "absolute",
+        top: 20,
+        flexDirection: "row",
+        gap: 24
     }
 })
